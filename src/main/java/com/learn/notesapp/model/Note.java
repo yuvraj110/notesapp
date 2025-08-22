@@ -15,6 +15,7 @@ public class Note {
     private String id;
     private String title;
     private String content;
+    private List<String> plans;
     private LocalDateTime createdAt = LocalDateTime.now();
 
 
