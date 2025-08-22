@@ -50,7 +50,7 @@ public class NotesController {
                 new GenericResponse(Constants.OK, Constants.UPDATE_SUCCESS_MSG,null,result,System.currentTimeMillis() - startTime));
     }
     @DeleteMapping(value = "deleteNote/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericResponse> deleteSingleNote(@PathVariable String id) throws IllegalAccessException {
+    public ResponseEntity<GenericResponse> deleteSingleNote(@PathVariable String id) {
         long startTime  =  System.currentTimeMillis();
         logger.info("invoking NotesController.deleteSingleNote");
         DeleteResult result =  service.deleteSingleNote(id);
