@@ -1,6 +1,7 @@
 package com.learn.notesapp.controller;
 
 import com.learn.notesapp.commons.Constants;
+import com.learn.notesapp.dto.NoteDetail;
 import com.learn.notesapp.model.Note;
 import com.learn.notesapp.service.NotesService;
 import com.learn.notesapp.utility.GenericResponse;
@@ -24,7 +25,7 @@ public class NotesController {
 
     private  static  final Logger logger = LoggerFactory.getLogger(NotesController.class);
 
-    @GetMapping("getallnotes")
+    @GetMapping("getAllNotes")
     public ResponseEntity<GenericResponse> getAllRecords(){
         long startTime  =  System.currentTimeMillis();
         logger.info("invoking NotesController. getAllRecords");
@@ -34,15 +35,15 @@ public class NotesController {
     }
 
     @PostMapping(value = "insertNote", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericResponse> insertSingleNote(@RequestBody Note note){
+    public ResponseEntity<GenericResponse> insertSingleNote(@RequestBody NoteDetail note){
         long startTime  =  System.currentTimeMillis();
         logger.info("invoking NotesController. insertSingleNote");
-        Note result =  service.insertSingleNote(note);
+        NoteDetail result =  service.insertSingleNote(note);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new GenericResponse(Constants.OK, Constants.INSERT_SUCCESS_MSG,null,result,System.currentTimeMillis() - startTime));
     }
     @PutMapping(value = "updateNote/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericResponse> updateSingleNote(@PathVariable String id , @RequestBody Note note) throws IllegalAccessException {
+    public ResponseEntity<GenericResponse> updateSingleNote(@PathVariable String id , @RequestBody NoteDetail note) throws IllegalAccessException {
         long startTime  =  System.currentTimeMillis();
         logger.info("invoking NotesController. updateSingleNote");
         Note result =  service.updateSingleNote(id,note);
@@ -56,5 +57,13 @@ public class NotesController {
         DeleteResult result =  service.deleteSingleNote(id);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new GenericResponse(Constants.OK, Constants.DELETE_SUCCESS_MSG,null,result,System.currentTimeMillis() - startTime));
+    }
+    @GetMapping(value = "getFilterNotes", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GenericResponse> getRecordByFilter(@RequestBody NoteDetail note){
+        long startTime  =  System.currentTimeMillis();
+        logger.info("invoking NotesController. getRecordByFilter");
+        List<Note> noteList =  service.getRecordByFilter(note);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new GenericResponse(Constants.OK, Constants.DATA_FOUND,null,noteList,System.currentTimeMillis() - startTime));
     }
 }

@@ -5,19 +5,16 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Document(collection = "users")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Document(collection = "content")
-public class Note {
+public class User {
+
     @Id
     private String id;
-    private String title;
-    private String content;
-    private List<String> plans;
     private String userName;
-    private LocalDateTime createdAt = LocalDateTime.now();
-
+    private String password;
+    private String role;
 }

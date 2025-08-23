@@ -1,5 +1,6 @@
 package com.learn.notesapp.service.impl;
 
+import com.learn.notesapp.dto.NoteDetail;
 import com.learn.notesapp.model.Note;
 import com.learn.notesapp.repository.NotesRepository;
 import com.learn.notesapp.service.NotesService;
@@ -18,17 +19,22 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public Note insertSingleNote(Note note) {
-        return repository.insertSingleNote(note);
+    public NoteDetail insertSingleNote(NoteDetail note) {
+       return repository.insertSingleNote(note);
     }
 
     @Override
-    public Note updateSingleNote(String id, Note note) throws IllegalAccessException {
+    public Note updateSingleNote(String id, NoteDetail note) throws IllegalAccessException {
         return repository.updateSingleNote(id,note);
     }
 
     @Override
     public DeleteResult deleteSingleNote(String id) {
         return repository.deleteSingleNote(id);
+    }
+
+    @Override
+    public List<Note> getRecordByFilter(NoteDetail note) {
+        return repository.getRecordByFilter(note);
     }
 }
