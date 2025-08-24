@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,10 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(UserDetails userDetails) {
-        if(repository.findByUserName(userDetails.getUserName()).isPresent()){
+        if (repository.findByUserName(userDetails.getUserName()).isPresent()) {
             return new User();
         }
-        User user =  new User();
+        User user = new User();
         user.setUserName(userDetails.getUserName());
         user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
         user.setRole(userDetails.getRole());
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String userName) {
-        Optional<User> user =  repository.findByUserName(userName);
+        Optional<User> user = repository.findByUserName(userName);
         return user.orElse(null);
     }
 }

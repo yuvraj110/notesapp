@@ -3,11 +3,9 @@ package com.learn.notesapp.config;
 
 import com.learn.notesapp.model.User;
 import com.learn.notesapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,26 +19,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthFilter;
+public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain  securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->auth.requestMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                        .anyRequest().authenticated())
                 /*.httpBasic(Customizer.withDefaults())*/ // this is used for basic auth
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
 
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
-            User user =  userRepository.findByUserName(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
-            return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
+            User user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUserName())
                     .password(user.getPassword())
                     .roles(user.getRole())
                     .build();
@@ -57,10 +53,6 @@ public class SecurityConfig  {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-
 
 
 }

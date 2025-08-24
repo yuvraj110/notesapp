@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class NotesServiceImpl implements NotesService {
     @Autowired
     NotesRepository repository;
+
     @Override
     public List<Note> getAllRecords() {
         return repository.getAllRecords();
@@ -20,12 +22,12 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public NoteDetail insertSingleNote(NoteDetail note) {
-       return repository.insertSingleNote(note);
+        return repository.insertSingleNote(note);
     }
 
     @Override
     public Note updateSingleNote(String id, NoteDetail note) throws IllegalAccessException {
-        return repository.updateSingleNote(id,note);
+        return repository.updateSingleNote(id, note);
     }
 
     @Override

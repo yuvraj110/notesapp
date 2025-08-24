@@ -35,7 +35,7 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse> registerUser(@RequestBody UserDetails userDetails){
+    public ResponseEntity<GenericResponse> registerUser(@RequestBody UserDetails userDetails) {
         long startTime = System.currentTimeMillis();
         try {
             User userResult = userService.registerUser(userDetails);
@@ -46,7 +46,7 @@ public class UserController {
                     userResult,
                     System.currentTimeMillis() - startTime
             ));
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse(
                     Constants.USER_NOT_FOUND,
                     e.getMessage(),
@@ -56,6 +56,7 @@ public class UserController {
             ));
         }
     }
+
     @PostMapping("login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserDetails request) {
         // Authenticate user
@@ -72,7 +73,6 @@ public class UserController {
         response.put("token", token);
         return ResponseEntity.ok(response);
     }
-
 
 
 }

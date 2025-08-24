@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Repository
 public class NotesRepositoryImpl implements NotesRepository {
     @Autowired
@@ -49,8 +50,8 @@ public class NotesRepositoryImpl implements NotesRepository {
 
     @Override
     public Note updateSingleNote(String id, NoteDetail note) throws IllegalAccessException {
-        Query query =  new Query(Criteria.where(Constants.ID).is(id));
-        Update update =  new Update();
+        Query query = new Query(Criteria.where(Constants.ID).is(id));
+        Update update = new Update();
         Field[] fields = Note.class.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -60,7 +61,7 @@ public class NotesRepositoryImpl implements NotesRepository {
             }
         }
         update.set("createdAt", LocalDateTime.now());
-        return mongoTemplate.findAndModify(query,update, FindAndModifyOptions.options().returnNew(true),Note.class);
+        return mongoTemplate.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true), Note.class);
     }
 
     @Override
@@ -68,10 +69,10 @@ public class NotesRepositoryImpl implements NotesRepository {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_admin"));
-        if(isAdmin) {
+        if (isAdmin) {
             Query query = new Query(Criteria.where(Constants.ID).is(id));
             return mongoTemplate.remove(query, Note.class);
-        }else {
+        } else {
             throw new UsernameNotFoundException("You are not applicable to delete the notes. Only admin can delete it.");
         }
     }
@@ -86,13 +87,13 @@ public class NotesRepositoryImpl implements NotesRepository {
         if (UtilityMethods.stringNullAndEmptyCheck(note.getTitle())) {
             query.addCriteria(Criteria.where("title").regex(note.getTitle(), "i"));
         }
-        if (UtilityMethods.stringNullAndEmptyCheck(note.getContent())){
+        if (UtilityMethods.stringNullAndEmptyCheck(note.getContent())) {
             query.addCriteria(Criteria.where(Constants.CONTENT).regex(note.getContent(), "i"));
         }
-        if (note.getPlans()!=null && !note.getPlans().isEmpty()){
+        if (note.getPlans() != null && !note.getPlans().isEmpty()) {
             query.addCriteria(Criteria.where("plans").in(note.getPlans()));
         }
 
-        return mongoTemplate.find(query,Note.class);
+        return mongoTemplate.find(query, Note.class);
     }
 }
